@@ -29,21 +29,36 @@ def print_roi_lines(frame: cv2.typing.MatLike):
             cv2.line(frame, roi_points[i], roi_points[i+1], (0, 255, 0), 2, cv2.LINE_AA)
 
 def print_center_points(frame: cv2.typing.MatLike, result: Results):
+    global enters_cnt
+    global roi_points
+    global np_roi_points
+    global state_dict
     boxes = result.boxes
     if boxes is not None:
-        xywh_coords = boxes.xywh.cpu().numpy()
-        for box in xywh_coords:
-            x, y, w, h = box
-            center = (int(x), int(y))
-            if len(roi_points) != 0:
-                tested_value = cv2.pointPolygonTest(np_roi_points, center, False)
-                if(tested_value > 0):
-                    cv2.circle(frame, center, 5, (0, 255, 0), -1, cv2.LINE_AA)
-                else:                
-                    cv2.circle(frame, center, 5, (0, 0, 255), -1, cv2.LINE_AA)
+        if boxes.id is not None:
+            xywh_coords = boxes.xywh.cpu().numpy()
+            ids = boxes.id.cpu().numpy().astype(int)
+            for box, id in zip(xywh_coords, ids):
+                x, y, w, h = box
+                center = (int(x), int(y))
+                if len(roi_points) >= 3:
+                    tested_value = cv2.pointPolygonTest(np_roi_points, center, False)
+                    if(tested_value > 0):
+                        cv2.circle(frame, center, 5, (0, 255, 0), -1, cv2.LINE_AA)
+                        previous_state = state_dict.get(id)
+                        if(previous_state is not None):
+                            if(previous_state is False):
+                                enters_cnt += 1
+                        state_dict.update({id:True})
+                    else:                
+                        cv2.circle(frame, center, 5, (0, 0, 255), -1, cv2.LINE_AA)
+                        state_dict.update({id:False})
+    print(f"Conunt: {enters_cnt}")
 
 roi_points = []
-np_roi_points = []
+np_roi_points = [] # to convert roi_points to np.array
+state_dict = {} # True - in roi; False - out of roi
+enters_cnt = 0
 
 cv2.setMouseCallback(WINDOW_NAME, mouse_callback)
 cap = cv2.VideoCapture(0)
