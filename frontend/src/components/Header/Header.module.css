@@ -1,0 +1,15 @@
+.header-container{
+    height: 60px;
+    background-color: var(--color-background);
+    box-shadow: 0 0 10px var(--color-shadow);
+}
+
+.header-container .logo-container{
+    display: flex;
+    justify-content: left;
+}
+
+.header-container .nav-container{
+    display: flex;
+    justify-content: right;
+}
