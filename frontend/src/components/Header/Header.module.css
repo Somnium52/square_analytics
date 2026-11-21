@@ -1,15 +1,24 @@
 .header-container{
     height: 60px;
-    background-color: var(--color-background);
+    background: var(--color-background);
     box-shadow: 0 0 10px var(--color-shadow);
+    display: flex;
+    align-items: center;
 }
 
 .header-container .logo-container{
     display: flex;
     justify-content: left;
+    margin-left: 20px;
+}
+
+.header-container .logo-container .logo-img{
+    height: 40px;
 }
 
 .header-container .nav-container{
+    width: 100%;
     display: flex;
     justify-content: right;
+    margin-right: 20px;
 }
