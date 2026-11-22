@@ -1,0 +1,78 @@
+h2{
+    margin: 0;
+    padding: 0;
+}
+
+.popup-overlay{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(5px);
+}
+
+.card-container{
+    background: var(--color-background);
+    border-radius: 15px;
+    padding: 50px 30px;
+    box-shadow: 0 0 300px var(--color-shadow-dark);
+    min-width: 300px;
+}
+
+.close-button{
+    position: absolute;
+    top: 20px;
+    width: 50px;
+    height: 50px;
+    right: 20px;
+    padding: 10px;
+    border-radius: 50%;
+    background: var(--color-shadow);
+    font-weight: bold;
+    font-size: 1.2em;
+    border: 1px solid var(--color-background);
+
+    &:hover{
+        cursor: pointer;
+        background: rgb(255,255,255,0.9);
+    }
+}
+
+/* HTML: <div class="loader"></div> */
+.loader {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 40px;
+    aspect-ratio: 1;
+    --c: linear-gradient(var(--color-orange) 0 0);
+    --r1: radial-gradient(farthest-side at bottom,var(--color-orange) 93%,#0000);
+    --r2: radial-gradient(farthest-side at top   ,var(--color-orange) 93%,#0000);
+    background: 
+    var(--c) ,var(--r1),var(--r2),
+    var(--c) ,var(--r1),var(--r2),
+    var(--c) ,var(--r1),var(--r2);
+    background-repeat: no-repeat;
+    animation: l2 1s infinite alternate;
+}
+@keyframes l2 {
+    0%,25% {
+        background-size: 8px 0,8px 4px,8px 4px,8px 0,8px 4px,8px 4px,8px 0,8px 4px,8px 4px;
+        background-position: 0 50%,0 calc(50% - 2px),0 calc(50% + 2px),50% 50%,50% calc(50% - 2px),50% calc(50% + 2px),100% 50%,100% calc(50% - 2px),100% calc(50% + 2px);
+    }
+    50% {
+        background-size: 8px 100%,8px 4px,8px 4px,8px 0,8px 4px,8px 4px,8px 0,8px 4px,8px 4px;
+        background-position: 0 50%,0 calc(0% - 2px),0 calc(100% + 2px),50% 50%,50% calc(50% - 2px),50% calc(50% + 2px),100% 50%,100% calc(50% - 2px),100% calc(50% + 2px);
+    }
+    75% {
+        background-size: 8px 100%,8px 4px,8px 4px,8px 100%,8px 4px,8px 4px,8px 0,8px 4px,8px 4px;
+        background-position: 0 50%,0 calc(0% - 2px),0 calc(100% + 2px),50% 50%,50% calc(0% - 2px),50% calc(100% + 2px),100% 50%,100% calc(50% - 2px),100% calc(50% + 2px);
+    }
+    95%,100% {
+        background-size: 8px 100%,8px 4px, 8px 4px,8px 100%,8px 4px,8px 4px,8px 100%,8px 4px,8px 4px;
+        background-position: 0 50%,0 calc(0% - 2px),0 calc(100% + 2px),50% 50%,50% calc(0% - 2px),50% calc(100% + 2px),100% 50%,100% calc(0% - 2px),100% calc(100% + 2px);
+    }
+}

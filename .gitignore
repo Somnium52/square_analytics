@@ -1,2 +1,3 @@
 # Ingore python .venv
 ai/.venv
+backend/.venv

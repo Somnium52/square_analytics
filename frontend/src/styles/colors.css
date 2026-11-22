@@ -5,5 +5,7 @@
     --color-blue: #62a8cb;
     --color-blue-hovered: #7abee0;
     --color-green: #73b682;
-    --color-shadow: rgba(255,255,255,0.3);
+    --color-shadow: rgba(255,255,255,0.6);
+    --color-shadow-dark: rgba(0,0,0,0.6);
+    --color-white-hovered: lightgray;
 }
