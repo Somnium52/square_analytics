@@ -8,7 +8,12 @@ export default function SingIn(){
         email: "",
         pass: "",
     })
-    const [error, setError] = useState(null)
+    const [info, setInfo] = useState(null)
+    const [infoColor, setInfoColor] = useState("")
+    const changeInfo = (text, color="white") =>{
+        setInfo(text)
+        setInfoColor(color)
+    }
     const [isSubmitting, setIsSubmitting] = useState(false)
 
     const handleChange = (e) =>{
@@ -18,14 +23,14 @@ export default function SingIn(){
 
     const validateData = () =>{
         if(userData.email.trim() == ""){
-            setError("Please enter a email")
+            changeInfo("Please enter a email", "red")
             return false
         }
         if(userData.pass.trim() == ""){
-            setError("Please enter a password")
+            changeInfo("Please enter a password", "red")
             return false
         }
-        setError(null)
+        changeInfo(null)
         return true
     }
 
@@ -33,6 +38,32 @@ export default function SingIn(){
         e.preventDefault()
         if(validateData()){
             setIsSubmitting(true)
+            try{
+                const res = await fetch("http://localhost:8000/singin-submit",{
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        email: userData.email,
+                        password: userData.pass,
+                    })
+                })
+                const serverRes = await res.json()
+                if (serverRes.success){
+                    console.log(serverRes.message)
+                    changeInfo(serverRes.message || "Sing In Successfully", "green")
+                }
+                else{
+                    changeInfo(serverRes.message || "Wrong email or paswword", "red")
+                }
+            }
+            catch(err){
+                console.error("Sing In request failed:", err)
+            }
+            finally{
+                setIsSubmitting(false)
+            }
         }
     }
 
@@ -55,7 +86,7 @@ export default function SingIn(){
                 onChange={handleChange}
                 isDisable={isSubmitting}
             />
-            <p style={{textAlign: 'center', fontSize: "0.8em", color: "red"}}>{error}</p>
+            <p style={{textAlign: 'center', fontSize: "0.8em", color: infoColor}}>{info}</p>
             <br />
             <Button backColor="var(--color-blue)" backColorHovered="var(--color-blue-hovered)" isLong={true} isDisabled={isSubmitting}><b>SIGN IN</b></Button>
             {isSubmitting ? (<div className={styles['loader']}/>) : (null)}

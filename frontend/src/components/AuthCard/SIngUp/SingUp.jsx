@@ -9,7 +9,13 @@ export default function SingUp(){
         pass: "",
         confPass: ""
     })
-    const [error, setError] = useState(null)
+    const [info, setInfo] = useState(null)
+    const [infoColor, setInfoColor] = useState("")
+    const changeInfo = (text, color="white") =>{
+        setInfo(text)
+        setInfoColor(color)
+    }
+
     const [isSubmitting, setIsSubmitting] = useState(false)
     
     const EMAIL_REGREX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
@@ -21,18 +27,18 @@ export default function SingUp(){
 
     const validateData = () =>{
         if(!EMAIL_REGREX.test(userData.email.trim())){
-            setError("Please enter a valid email address")
+            changeInfo("Please enter a valid email address", "red")
             return false
         }
         if(userData.pass.trim().length < 8){
-            setError("Password must be at least 8 characters")
+            changeInfo("Password must be at least 8 characters", "red")
             return false
         }
         if(userData.pass != userData.confPass){
-            setError("Passwords don't match")
+            changeInfo("Passwords don't match", "red")
             return false
         }
-        setError(null)
+        changeInfo(null)
         return true
     }
  
@@ -56,14 +62,15 @@ export default function SingUp(){
 
                 if(serverRes.success){
                     console.log(serverRes.message)
+                    changeInfo(serverRes.message || "User has been created successfully", "green")
                 }
                 else{
-                    setError(serverRes.message || "Sing Up Error")
+                    changeInfo(serverRes.message || "This email is already registered", "red")
                 }
             }
             catch(err){
-                console.error("Signup request failed:", err)
-                setError("Can't connect to server")
+                console.error("Sign Up request failed:", err)
+                changeInfo("Can't connect to server", "red")
             }
             finally{
                 setIsSubmitting(false)
@@ -98,7 +105,7 @@ export default function SingUp(){
                 onChange={handleChange}
                 isDisable={isSubmitting}
             />
-            <p style={{textAlign: 'center', fontSize: "0.8em", color: "red"}}>{error}</p>
+            <p style={{textAlign: 'center', fontSize: "0.8em", color: infoColor}}>{info}</p>
             <br />
             <Button backColor="var(--color-blue)" backColorHovered="var(--color-blue-hovered)" isLong={true} isDisabled={isSubmitting}><b>SIGN UP</b></Button>
             {isSubmitting ? (<div className={styles['loader']}/>) : (null)}
